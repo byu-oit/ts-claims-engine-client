@@ -1,0 +1,66 @@
+{
+  "name": "@byu-oit/ts-claims-engine-client",
+  "version": "0.0.0",
+  "description": "Claims engine client implementation in TypeScript",
+  "main": "dist/assertion-client.js",
+  "types": "dist/assertion-client.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "lint": "tslint -p tsconfig.json -t stylish --fix",
+    "build": "tsc",
+    "test": "nyc mocha -r ts-node/register ./test/**/*-test.ts",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "nyc": {
+    "include": [
+      "lib/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byu-oit/ts-claims-engine-client.git"
+  },
+  "keywords": [
+    "claims",
+    "adjudicator",
+    "engine",
+    "client",
+    "typescript"
+  ],
+  "author": "Spencer Tuft <spencer_tuft@byu.edu>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/byu-oit/ts-claims-engine-client/issues"
+  },
+  "homepage": "https://github.com/byu-oit/ts-claims-engine-client#readme",
+  "devDependencies": {
+    "@byu-oit/ts-claims-engine": "^0.1.1",
+    "@types/chai": "^4.2.3",
+    "@types/lodash": "^4.14.139",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.7.8",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.6",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "source-map-support": "^0.5.13",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.19.0",
+    "typescript": "^3.6.3"
+  }
+}
