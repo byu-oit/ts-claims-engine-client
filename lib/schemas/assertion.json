@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "root",
+  "type": "object",
+  "properties": {
+    "subject": {
+      "$id": "#/properties/subject",
+      "type": "string",
+      "title": "Subject"
+    },
+    "mode": {
+      "$id": "#/properties/mode",
+      "enum": [
+        "all",
+        "any",
+        "one"
+      ],
+      "type": "string",
+      "title": "Mode"
+    },
+    "claims": {
+      "$id": "#/properties/claims",
+      "title": "Claim",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "concept": {
+            "$id": "#/patternProperties/properties/claims/properties/concept",
+            "type": "string",
+            "title": "Concept"
+          },
+          "relationship": {
+            "$id": "#/patternProperties/properties/claims/properties/relationship",
+            "title": "Relationship",
+            "enum": [
+              "eq",
+              "gt",
+              "gt_or_eq",
+              "lt",
+              "lt_or_eq",
+              "not_eq"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "$id": "#/patternProperties/properties/claims/properties/value",
+            "type": "string",
+            "title": "Value"
+          },
+          "qualifier": {
+            "$id": "#/patternProperties/properties/claims/properties/qualifiers",
+            "title": "Qualifiers",
+            "type": "object"
+          }
+        },
+        "required": [
+          "concept",
+          "relationship",
+          "value"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "subject",
+    "claims"
+  ]
+}

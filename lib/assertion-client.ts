@@ -1,64 +1,71 @@
-import {Claims, Mode, Qualifiers, Relationship} from '@byu-oit/ts-claims-engine';
-import ClaimClient from './claim-client'
+import {ClaimItem, Mode} from '@byu-oit/ts-claims-engine';
+import Ajv from 'ajv';
+import uuid from 'uuid';
+import ClaimClient, {ClaimClientParams, PartialClaim} from './claim-client';
+import schema from './schemas/assertion.json';
+
+export interface PartialAssertion {
+    subject?: string;
+    mode?: Mode;
+    claims?: PartialClaim[];
+}
+
+export interface AssertionClientParams {
+    id?: string;
+    subject?: string;
+    mode?: Mode;
+    claims?: Array<ClaimClient | ClaimItem>;
+}
 
 export default class AssertionClient {
-    public static claim(concept?: string, relationship?: Relationship, value?: string, qualifier?: Qualifiers) {
-        return new ClaimClient(concept, relationship, value, qualifier);
+    public static claim(options?: ClaimClientParams) {
+        return new ClaimClient(options);
     }
 
-    public static join(...assertions: AssertionClient[]): Claims {
-        return assertions.reduce((result, assertion) => {
-            return Object.assign(result, assertion.format())
-        }, {})
-    }
+    public id: string;
+    public assertion: PartialAssertion = {};
+    public valid: boolean = false;
 
-    private _id: string;
-    private _subject?: string;
-    private _mode?: Mode;
-    private _claims: ClaimClient[] = [];
+    private SUBJECT?: string;
+    private MODE?: Mode;
+    private CLAIMS?: ClaimClient[];
 
-    constructor(id: string, subject?: string, mode?: Mode, ...claims: ClaimClient[]) {
-        this._id = id;
-        if (subject) {
-            this.subject(subject);
-        }
-        if (mode) {
-            this.mode(mode);
-        }
-        if (claims.length) {
-            this.assert(...claims)
-        }
+    private validate = new Ajv().compile(schema);
+
+    constructor(options: AssertionClientParams = {}) {
+        const {id, subject, mode, claims} = options;
+        this.id = id || uuid();
+        if (subject) { this.subject(subject); }
+        if (mode) { this.mode(mode); }
+        if (claims) { this.claim(...claims); }
+        this.compile();
     }
 
     public subject = (value: string): AssertionClient => {
-        this._subject = value;
+        this.SUBJECT = value;
+        this.compile();
         return this;
     };
 
     public mode = (value: Mode): AssertionClient => {
-        this._mode = value;
+        this.MODE = value;
+        this.compile();
         return this;
     };
 
-    public assert = (...values: ClaimClient[]): AssertionClient => {
-        this._claims = this._claims.concat(values);
+    public claim = (...values: Array<ClaimClient | ClaimItem>): AssertionClient => {
+        if (!this.CLAIMS) this.CLAIMS = [];
+        this.CLAIMS = this.CLAIMS.concat(values.map(value => value instanceof ClaimClient ? value : new ClaimClient(value)));
+        this.compile();
         return this;
     };
 
-    public format = (): Claims => {
-        if (!this._subject) {
-            throw new Error(`Undefined subject in assertion '${this._id}'`)
-        }
-        if (!this._claims.length) {
-            throw new Error(`Empty claim in assertion '${this._id}'`)
-        }
-
-        return {
-            [this._id]: {
-                subject: this._subject,
-                mode: this._mode || 'all',
-                claims: this._claims.map(cc => cc.format())
-            }
-        }
-    }
+    private compile = (): void => {
+        this.assertion = {
+            ...this.SUBJECT && {subject: this.SUBJECT},
+            ...this.MODE && {mode: this.MODE},
+            ...this.CLAIMS && {claims: this.CLAIMS.map(({claim}) => claim)}
+        };
+        this.valid = this.validate(this.assertion) as boolean;
+    };
 }

@@ -1,65 +1,83 @@
-import {ClaimItem, Qualifiers, Relationship} from "@byu-oit/ts-claims-engine";
+import {Qualifiers, Relationship} from '@byu-oit/ts-claims-engine';
+import Ajv from 'ajv';
+import schema from './schemas/claim.json';
+
+export interface PartialClaim {
+    concept?: string;
+    relationship?: Relationship;
+    value?: string;
+    qualifier?: Qualifiers;
+}
+
+export interface ClaimClientParams {
+    concept?: string;
+    relationship?: Relationship;
+    value?: string;
+    qualifier?: Qualifiers;
+}
 
 export default class ClaimClient {
-    private _concept?: string;
-    private _relationship?: Relationship;
-    private _value?: string;
-    private _qualifier?: Qualifiers;
+    public claim: PartialClaim = {};
+    public valid: boolean = false;
 
-    constructor(concept?: string, relationship?: Relationship, value?: string, qualifier?: Qualifiers) {
+    private CONCEPT?: string;
+    private RELATIONSHIPS?: Relationship;
+    private VALUE?: string;
+    private QUALIFIER?: Qualifiers;
+
+    private validate = new Ajv().compile(schema);
+
+    constructor(options: ClaimClientParams = {}) {
+        const {concept, relationship, value, qualifier} = options;
         if (concept) {
             this.concept(concept);
         }
         if (relationship) {
-            this.relationship(relationship)
+            this.relationship(relationship);
         }
         if (value) {
-            this.value(value)
+            this.value(value);
         }
         if (qualifier) {
             const qualifiers = Object.entries(qualifier);
-            qualifiers.forEach(([key, value]) => {
-                this.qualify(key, value)
-            })
+            qualifiers.forEach(([key, val]) => {
+                this.qualify(key, val);
+            });
         }
+        this.compile();
     }
 
+    private compile = (): void => {
+        this.claim = {
+            ...this.CONCEPT && {concept: this.CONCEPT},
+            ...this.RELATIONSHIPS && {relationship: this.RELATIONSHIPS},
+            ...this.VALUE && {value: this.VALUE},
+            ...this.QUALIFIER && {qualifier: this.QUALIFIER}
+        };
+        this.valid = this.validate(this.claim) as boolean;
+    };
+
     public concept = (value: string): ClaimClient => {
-        this._concept = value;
+        this.CONCEPT = value;
+        this.compile();
         return this;
     };
 
     public relationship = (value: Relationship): ClaimClient => {
-        this._relationship = value;
+        this.RELATIONSHIPS = value;
+        this.compile();
         return this;
     };
 
     public value = (value: string): ClaimClient => {
-        this._value = value;
+        this.VALUE = value;
+        this.compile();
         return this;
     };
 
     public qualify = (key: string, value: any): ClaimClient => {
-        this._qualifier = Object.assign(this._qualifier || {}, {[key]: value});
+        this.QUALIFIER = Object.assign(this.QUALIFIER || {}, {[key]: value});
+        this.compile();
         return this;
     };
-
-    public format = (): ClaimItem => {
-        if (!this._concept) {
-            throw new Error(`Undefined concept in claim`);
-        }
-        if (!this._relationship) {
-            throw new Error(`Undefined relationship in claim`);
-        }
-        if (!this._value) {
-            throw new Error(`Undefined value in claim`);
-        }
-
-        return {
-            concept: this._concept,
-            relationship: this._relationship,
-            value: this._value,
-            ...this._qualifier && {qualifier: this._qualifier}
-        };
-    }
 }

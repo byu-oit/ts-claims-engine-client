@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "root",
+  "title": "Claim",
+  "type": "object",
+  "properties": {
+    "concept": {
+      "$id": "#/properties/concept",
+      "type": "string",
+      "title": "Concept"
+    },
+    "relationship": {
+      "$id": "#/properties/relationship",
+      "title": "Relationship",
+      "enum": [
+        "eq",
+        "gt",
+        "gt_or_eq",
+        "lt",
+        "lt_or_eq",
+        "not_eq"
+      ],
+      "type": "string"
+    },
+    "value": {
+      "$id": "#/properties/value",
+      "type": "string",
+      "title": "Value"
+    },
+    "qualifier": {
+      "$id": "#/properties/qualifiers",
+      "title": "Qualifiers",
+      "type": "object"
+    }
+  },
+  "required": [
+    "concept",
+    "relationship",
+    "value"
+  ]
+}

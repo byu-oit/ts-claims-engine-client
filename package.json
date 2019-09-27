@@ -2,8 +2,8 @@
   "name": "@byu-oit/ts-claims-engine-client",
   "version": "0.0.0",
   "description": "Claims engine client implementation in TypeScript",
-  "main": "dist/assertion-client.js",
-  "types": "dist/assertion-client.d.ts",
+  "main": "dist/assertions-client.js",
+  "types": "dist/assertions-client.d.ts",
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -51,9 +51,9 @@
   "devDependencies": {
     "@byu-oit/ts-claims-engine": "^0.1.1",
     "@types/chai": "^4.2.3",
-    "@types/lodash": "^4.14.139",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.7.8",
+    "@types/uuid": "^3.4.5",
     "chai": "^4.2.0",
     "coveralls": "^3.0.6",
     "mocha": "^6.2.0",
@@ -62,5 +62,9 @@
     "ts-node": "^8.3.0",
     "tslint": "^5.19.0",
     "typescript": "^3.6.3"
+  },
+  "dependencies": {
+    "ajv": "^6.10.2",
+    "uuid": "^3.3.3"
   }
 }

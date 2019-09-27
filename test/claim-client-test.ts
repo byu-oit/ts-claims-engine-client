@@ -12,40 +12,25 @@ describe('Claim Client', () => {
     });
 
     it('will fail to format a client missing a concept', () => {
-        try {
-            cc.relationship('eq')
-                .value('John')
-                .qualify('age', 43)
-                .format();
-            assert.isFalse(flag);
-        } catch (e) {
-            assert.equal(e.message, 'Undefined concept in claim');
-        }
+        const {valid} = cc.relationship('eq')
+            .value('John')
+            .qualify('age', 43);
+        assert.isFalse(valid);
     });
 
     it('will fail to format a client missing a relationship', () => {
-        try {
-            cc.concept('subject-exists')
+            const {valid} = cc.concept('subject-exists')
                 .value('John')
-                .qualify('age', 43)
-                .format();
-            assert.isFalse(flag);
-        } catch (e) {
-            assert.equal(e.message, 'Undefined relationship in claim');
-        }
+                .qualify('age', 43);
+            assert.isFalse(valid);
     });
 
 
     it('will fail to format a client missing a value', () => {
-        try {
-            cc.concept('subject-exists')
+            const {valid} = cc.concept('subject-exists')
                 .relationship('eq')
-                .qualify('age', 43)
-                .format();
-            assert.isFalse(flag);
-        } catch (e) {
-            assert.equal(e.message, 'Undefined value in claim');
-        }
+                .qualify('age', 43);
+            assert.isFalse(valid);
     });
 
     it('will format a client without a qualifier', () => {
@@ -57,12 +42,12 @@ describe('Claim Client', () => {
                 age: 43
             }
         };
-        const actual = cc.concept('subject-exists')
+        const {claim, valid} = cc.concept('subject-exists')
             .relationship('eq')
             .value('John')
-            .qualify('age', 43)
-            .format();
-        assert.deepEqual(actual, expected);
+            .qualify('age', 43);
+        assert.isTrue(valid);
+        assert.deepEqual(claim, expected);
     });
 
     it('will format a client with multiple qualifiers', () => {
@@ -75,12 +60,12 @@ describe('Claim Client', () => {
                 height: 5.6
             }
         };
-        const actual = cc.concept('subject-exists')
+        const {claim, valid} = cc.concept('subject-exists')
             .relationship('eq')
             .value('John')
             .qualify('age', 43)
-            .qualify('height', 5.6)
-            .format();
-        assert.deepEqual(actual, expected);
+            .qualify('height', 5.6);
+        assert.isTrue(valid);
+        assert.deepEqual(claim, expected);
     });
 });
