@@ -20,7 +20,7 @@ export default class AssertionsClient {
     private ajv = new Ajv();
     private validate = this.ajv.compile(schema);
 
-    public assert(assertionId?: string): AssertionsClient {
+    public assert = (assertionId?: string): AssertionsClient => {
         if (assertionId && this.assertions[assertionId]) {
             const {subject, mode, claims} = this.assertions[assertionId];
             this.CURRENT = new AssertionClient({
@@ -36,7 +36,7 @@ export default class AssertionsClient {
         }
         this.compile();
         return this;
-    }
+    };
     public subject = (value: string): AssertionsClient => {
         if (this.CURRENT === undefined) {
             this.CURRENT = new AssertionClient({id: uuid()});
