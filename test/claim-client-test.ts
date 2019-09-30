@@ -4,11 +4,9 @@ import {ClaimItem} from "@byu-oit/ts-claims-engine";
 
 describe('Claim Client', () => {
     let cc: ClaimClient;
-    let flag: boolean;
 
     beforeEach(() => {
         cc = new ClaimClient();
-        flag = true;
     });
 
     it('will fail to format a client missing a concept', () => {
