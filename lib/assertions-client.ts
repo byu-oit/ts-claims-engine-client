@@ -20,7 +20,7 @@ export default class AssertionsClient {
     private ajv = new Ajv();
     private validate = this.ajv.compile(schema);
 
-    public assert = (assertionId?: string): AssertionsClient => {
+    public assert = (assertionId?: string) => {
         if (assertionId && this.assertions[assertionId]) {
             const {subject, mode, claims} = this.assertions[assertionId];
             this.CURRENT = new AssertionClient({
@@ -37,7 +37,7 @@ export default class AssertionsClient {
         this.compile();
         return this;
     };
-    public subject = (value: string): AssertionsClient => {
+    public subject = (value: string) => {
         if (this.CURRENT === undefined) {
             this.CURRENT = new AssertionClient({id: uuid()});
         }
@@ -46,7 +46,7 @@ export default class AssertionsClient {
         return this;
     };
 
-    public mode = (value: Mode): AssertionsClient => {
+    public mode = (value: Mode) => {
         if (this.CURRENT === undefined) {
             this.CURRENT = new AssertionClient({id: uuid()});
         }
@@ -55,7 +55,7 @@ export default class AssertionsClient {
         return this;
     };
 
-    public claim = (...values: ClaimClient[]): AssertionsClient => {
+    public claim = (...values: ClaimClient[]) => {
         if (this.CURRENT === undefined) {
             this.CURRENT = new AssertionClient({id: uuid()});
         }

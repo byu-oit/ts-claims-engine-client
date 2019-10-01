@@ -41,19 +41,19 @@ export default class AssertionClient {
         this.compile();
     }
 
-    public subject = (value: string): AssertionClient => {
+    public subject = (value: string) => {
         this.SUBJECT = value;
         this.compile();
         return this;
     };
 
-    public mode = (value: Mode): AssertionClient => {
+    public mode = (value: Mode) => {
         this.MODE = value;
         this.compile();
         return this;
     };
 
-    public claim = (...values: Array<ClaimClient | ClaimItem>): AssertionClient => {
+    public claim = (...values: Array<ClaimClient | ClaimItem>) => {
         if (!this.CLAIMS) this.CLAIMS = [];
         this.CLAIMS = this.CLAIMS.concat(values.map(value => value instanceof ClaimClient ? value : new ClaimClient(value)));
         this.compile();

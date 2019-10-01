@@ -57,25 +57,25 @@ export default class ClaimClient {
         this.valid = this.validate(this.claim) as boolean;
     };
 
-    public concept = (value: string): ClaimClient => {
+    public concept = (value: string) => {
         this.CONCEPT = value;
         this.compile();
         return this;
     };
 
-    public relationship = (value: Relationship): ClaimClient => {
+    public relationship = (value: Relationship) => {
         this.RELATIONSHIPS = value;
         this.compile();
         return this;
     };
 
-    public value = (value: string): ClaimClient => {
+    public value = (value: string) => {
         this.VALUE = value;
         this.compile();
         return this;
     };
 
-    public qualify = (key: string, value: any): ClaimClient => {
+    public qualify = (key: string, value: any) => {
         this.QUALIFIER = Object.assign(this.QUALIFIER || {}, {[key]: value});
         this.compile();
         return this;
