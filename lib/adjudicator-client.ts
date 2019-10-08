@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import ClaimClient, {ClaimClientParams, PartialClaim} from './claim-client';
 import schema from './schemas/assertion.json';
 
-export interface PartialAssertion {
+interface PartialAssertion {
     [key: string]: {
         subject?: string;
         mode?: Mode;
@@ -12,7 +12,7 @@ export interface PartialAssertion {
     };
 }
 
-export interface AssertionClientParams {
+interface AssertionClientParams {
     id?: string;
     subject?: string;
     mode?: Mode;
@@ -21,7 +21,7 @@ export interface AssertionClientParams {
 
 const v = new Ajv().compile(schema);
 
-export default class AdjudicatorClient {
+export = class AdjudicatorClient {
     public static validate(assertion: any) {
         return v(assertion);
     }

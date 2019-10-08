@@ -10,7 +10,8 @@
   },
   "scripts": {
     "lint": "tslint -p tsconfig.json -t stylish --fix",
-    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
     "test": "nyc mocha -r ts-node/register ./test/**/*-test.ts",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
