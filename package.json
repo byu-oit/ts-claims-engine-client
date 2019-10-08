@@ -11,6 +11,7 @@
   "scripts": {
     "lint": "tslint -p tsconfig.json -t stylish --fix",
     "build": "tsc",
+    "docs": "./node_modules/.bin/typedoc --excludeExternals --excludePrivate --excludeProtected --out docs lib/assertions-client.ts",
     "test": "nyc mocha -r ts-node/register ./test/**/*-test.ts",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
@@ -60,6 +61,7 @@
     "source-map-support": "^0.5.13",
     "ts-node": "^8.3.0",
     "tslint": "^5.19.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.6.3"
   },
   "dependencies": {
