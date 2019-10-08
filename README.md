@@ -1,5 +1,4 @@
 # ts-claims-engine-client
-##### Claims engine client
 [![Build Status](https://travis-ci.org/byu-oit/ts-claims-engine-client.svg?branch=master)](https://travis-ci.org/byu-oit/ts-claims-engine-client)
 [![Coverage Status](https://coveralls.io/repos/github/byu-oit/ts-claims-engine-client/badge.svg?branch=master)](https://coveralls.io/github/byu-oit/ts-claims-engine-client?branch=master)
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/byu-oit/ts-claims-engine-client)
@@ -33,18 +32,18 @@ console.log(JSON.stringify(client.assertion, null, 2))
 ## API
 Some of the parameters and return types are complex objects. Instead of listing them in the method definitions, they have been listed in the [Appendix](#appendix) under [API Reference](#api-reference).
 
-##### AdjudicatorClient
+### AdjudicatorClient
 Creates a new instance of the AssertionsClient.
 ```ts
 new AssertionsClient()
 ```
 
-##### Public Data Members
+### Public Data Members
 `id: string`: The ID of the assertion object.
 
 `assertion: PartialAssertion`: The assertion object for making a claims request.
 
-##### Static Methods
+### Static Methods
 `AdjudicatorClient.validate`: Provides programatic access to validate an assertion/claims object.
 ```ts
 AdjudicatorClient.validate(assertion: any): boolean
@@ -60,7 +59,7 @@ AdjudicatorClient.claim(options?: ClaimClientParams): ClaimClient
 AdjudicatorClient.join(...assertions: AdjudicaatorClient): {[key: string]: PartialAssertion}
 ```
 
-##### Public Methods
+### Public Methods
 `subject`: Adds `subject: [value]` to the assertion object.
 ```ts
 subject(value: string): this
@@ -84,7 +83,7 @@ validate(): boolean
 
 ## Appendix
 
-##### API Reference
+### API Reference
 ```ts
 interface ClaimClientParams {
     concept?: string;
@@ -121,7 +120,7 @@ type Relationship = 'gt' | 'gt_or_eq' | 'lt' | 'lt_or_eq' | 'eq' | 'not_eq';
 
 ```
 
-#### Related Packages
+### Related Packages
 * [Claims Adjudicator Module (CAM)](https://github.com/byu-oit/ts-claims-engine)
 * [Claims Adjudicator Middleware](https://github.com/byu-oit/ts-claims-engine-middleware)
 * [Claims Adjudicator Client](https://github.com/byu-oit/ts-claims-engine-client)
