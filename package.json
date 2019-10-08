@@ -1,6 +1,6 @@
 {
   "name": "@byu-oit/ts-claims-engine-client",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "Claims engine client implementation in TypeScript",
   "main": "dist/adjudicator-client.js",
   "types": "dist/adjudicator-client.d.ts",
