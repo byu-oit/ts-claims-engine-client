@@ -8,7 +8,9 @@
 `npm i @byu-oit/ts-claims-engine-client`
 
 ## Introduction
-The purpose of the Claims Adjudicator Client is to facilitate the formation of claims requests using functional sytax.
+The purpose of the Claims Adjudicator Client is to facilitate the formation of claims requests using functional syntax.
+
+:sparkles: ![View TypeDocs](https://byu-oit.github.io/ts-claims-engine-client/) :sparkles:
 
 ## Example
 ```js
