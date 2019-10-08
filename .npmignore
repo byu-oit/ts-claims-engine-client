@@ -1,6 +1,6 @@
 lib/
 test/
-docs/
+examples/
 .idea/
 tsconfig.json
 tslint.json
