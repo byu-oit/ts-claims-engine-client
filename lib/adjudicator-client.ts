@@ -1,10 +1,10 @@
 import {ClaimItem, Mode} from '@byu-oit/ts-claims-engine';
 import Ajv from 'ajv';
 import uuid from 'uuid';
-import ClaimClient, {ClaimClientParams, PartialClaim} from './claim-client';
+import {ClaimClient, ClaimClientParams, PartialClaim} from './claim-client';
 import schema from './schemas/assertion.json';
 
-interface PartialAssertion {
+export interface PartialAssertion {
     [key: string]: {
         subject?: string;
         mode?: Mode;
@@ -12,7 +12,7 @@ interface PartialAssertion {
     };
 }
 
-interface AssertionClientParams {
+export interface AssertionClientParams {
     id?: string;
     subject?: string;
     mode?: Mode;
@@ -21,7 +21,7 @@ interface AssertionClientParams {
 
 const v = new Ajv().compile(schema);
 
-export = class AdjudicatorClient {
+export class AdjudicatorClient {
     public static validate(assertion: any) {
         return v(assertion);
     }

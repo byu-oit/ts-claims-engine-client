@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import ClaimClient from '../lib/claim-client';
+import {ClaimClient} from '../lib/claim-client';
 import {ClaimItem} from "@byu-oit/ts-claims-engine";
 
 describe('Claim Client', () => {

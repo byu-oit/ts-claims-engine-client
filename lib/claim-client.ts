@@ -16,7 +16,7 @@ export interface ClaimClientParams {
     qualifier?: Qualifiers;
 }
 
-export default class ClaimClient {
+export class ClaimClient {
     public claim: PartialClaim = {};
     public valid: boolean = false;
 

@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import AdjudicatorClient from '../lib/adjudicator-client';
+import {AdjudicatorClient} from '../lib/adjudicator-client';
 
 describe('Adjudicator Client', () => {
     let ac: AdjudicatorClient;
