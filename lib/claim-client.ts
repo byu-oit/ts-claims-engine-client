@@ -47,16 +47,6 @@ export default class ClaimClient {
         this.compile();
     }
 
-    private compile = (): void => {
-        this.claim = {
-            ...this.CONCEPT && {concept: this.CONCEPT},
-            ...this.RELATIONSHIPS && {relationship: this.RELATIONSHIPS},
-            ...this.VALUE && {value: this.VALUE},
-            ...this.QUALIFIER && {qualifier: this.QUALIFIER}
-        };
-        this.valid = this.validate(this.claim) as boolean;
-    };
-
     public concept = (value: string) => {
         this.CONCEPT = value;
         this.compile();
@@ -79,5 +69,15 @@ export default class ClaimClient {
         this.QUALIFIER = Object.assign(this.QUALIFIER || {}, {[key]: value});
         this.compile();
         return this;
+    };
+
+    private compile = (): void => {
+        this.claim = {
+            ...this.CONCEPT && {concept: this.CONCEPT},
+            ...this.RELATIONSHIPS && {relationship: this.RELATIONSHIPS},
+            ...this.VALUE && {value: this.VALUE},
+            ...this.QUALIFIER && {qualifier: this.QUALIFIER}
+        };
+        this.valid = this.validate(this.claim) as boolean;
     };
 }
