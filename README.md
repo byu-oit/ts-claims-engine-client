@@ -10,7 +10,7 @@
 ## Introduction
 The purpose of the Claims Adjudicator Client is to facilitate the formation of claims requests using functional syntax.
 
-:sparkles: ![View TypeDocs](https://byu-oit.github.io/ts-claims-engine-client/) :sparkles:
+:sparkles: [View TypeDocs](https://byu-oit.github.io/ts-claims-engine-client) :sparkles:
 
 ## Example
 ```js
@@ -31,7 +31,7 @@ const {assertions, valid} = ac
 ```
 
 ## Related Packages
-* ![Claims Adjudicator Module (CAM)](https://github.com/byu-oit/ts-claims-engine)
-* ![Claims Adjudicator Middleware](https://github.com/byu-oit/ts-claims-engine-middleware)
-* ![Claims Adjudicator Client](https://github.com/byu-oit/ts-claims-engine-client)
-* ![Claims Adjudicator WSO2 Request](https://github.com/byu-oit/ts-wso2-claims-request)
+* [Claims Adjudicator Module (CAM)](https://github.com/byu-oit/ts-claims-engine)
+* [Claims Adjudicator Middleware](https://github.com/byu-oit/ts-claims-engine-middleware)
+* [Claims Adjudicator Client](https://github.com/byu-oit/ts-claims-engine-client)
+* [Claims Adjudicator WSO2 Request](https://github.com/byu-oit/ts-wso2-claims-request)
