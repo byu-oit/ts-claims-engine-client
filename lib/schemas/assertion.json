@@ -2,68 +2,96 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "root",
   "type": "object",
+  "minProperties": 1,
   "patternProperties": {
     ".*": {
+      "$ref": "#/definitions/assertion"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "subject": {
+      "$id": "#/definitions/subject",
+      "type": "string",
+      "title": "Subject"
+    },
+    "mode": {
+      "$id": "#/definitions/mode",
+      "enum": [
+        "all",
+        "any",
+        "one"
+      ],
+      "type": "string",
+      "title": "Mode"
+    },
+    "concept": {
+      "$id": "#/definitions/concept",
+      "type": "string",
+      "title": "Concept"
+    },
+    "relationship": {
+      "$id": "#/definitions/relationship",
+      "title": "Relationship",
+      "enum": [
+        "eq",
+        "gt",
+        "gt_or_eq",
+        "lt",
+        "lt_or_eq",
+        "not_eq"
+      ],
+      "type": "string"
+    },
+    "value": {
+      "$id": "#/definitions/value",
+      "type": "string",
+      "title": "Value"
+    },
+    "qualifier": {
+      "$id": "#/definitions/qualifiers",
+      "title": "Qualifiers",
+      "type": "object"
+    },
+    "claims": {
+      "$id": "#/definitions/claims",
+      "title": "Claim",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "concept": {
+            "$ref": "#/definitions/concept"
+          },
+          "relationship": {
+            "$ref": "#/definitions/relationship"
+          },
+          "value": {
+            "$ref": "#/definitions/value"
+          },
+          "qualifier": {
+            "$ref": "#/definitions/qualifier"
+          }
+        },
+        "required": [
+          "concept",
+          "relationship",
+          "value"
+        ]
+      },
+      "minItems": 1
+    },
+    "assertion": {
       "type": "object",
       "properties": {
         "subject": {
-          "$id": "#/patternProperties/properties/subject",
-          "type": "string",
-          "title": "Subject"
+          "$ref": "#/definitions/subject"
         },
         "mode": {
-          "$id": "#/patternProperties/properties/mode",
-          "enum": [
-            "all",
-            "any",
-            "one"
-          ],
-          "type": "string",
-          "title": "Mode"
+          "$ref": "#/definitions/mode"
         },
         "claims": {
-          "$id": "#/patternProperties/properties/claims",
-          "title": "Claim",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "concept": {
-                "$id": "#/patternProperties/properties/claims/properties/concept",
-                "type": "string",
-                "title": "Concept"
-              },
-              "relationship": {
-                "$id": "#/patternProperties/properties/claims/properties/relationship",
-                "title": "Relationship",
-                "enum": [
-                  "eq",
-                  "gt",
-                  "gt_or_eq",
-                  "lt",
-                  "lt_or_eq",
-                  "not_eq"
-                ],
-                "type": "string"
-              },
-              "value": {
-                "$id": "#/patternProperties/properties/claims/properties/value",
-                "type": "string",
-                "title": "Value"
-              },
-              "qualifier": {
-                "$id": "#/patternProperties/properties/claims/properties/qualifiers",
-                "title": "Qualifiers",
-                "type": "object"
-              }
-            },
-            "required": [
-              "concept",
-              "relationship",
-              "value"
-            ]
-          },
-          "minItems": 1
+          "$ref": "#/definitions/claims"
         }
       },
       "required": [

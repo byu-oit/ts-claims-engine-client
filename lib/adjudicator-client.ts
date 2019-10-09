@@ -19,13 +19,11 @@ export interface AssertionClientParams {
     claims?: Array<ClaimClient | ClaimItem>;
 }
 
-const v = new Ajv().compile(schema);
-
-export const jsonSchema = schema;
-
 export class AdjudicatorClient {
+    public static jsonSchema = schema;
+
     public static validate = (assertion: any) => {
-        return v(assertion);
+        return new Ajv().compile(schema)(assertion);
     };
 
     public static claim = (options?: ClaimClientParams) => {
@@ -34,7 +32,7 @@ export class AdjudicatorClient {
 
     public static join = (...assertions: AdjudicatorClient[]) => {
         return assertions.reduce((result, current) => {
-            return Object.assign(result, current.assertion);
+            return Object.assign(result, current.assertion());
         }, {});
     };
 
@@ -42,8 +40,7 @@ export class AdjudicatorClient {
         return value instanceof ClaimClient ? value : new ClaimClient(value);
     };
 
-    public id: string;
-    public assertion: PartialAssertion = {};
+    public _id: string;
 
     private _subject?: string;
     private _mode?: Mode;
@@ -51,7 +48,7 @@ export class AdjudicatorClient {
 
     constructor(options: AssertionClientParams = {}) {
         const {id, subject, mode, claims} = options;
-        this.id = id || uuid();
+        this._id = id || uuid();
         if (subject) {
             this.subject(subject);
         }
@@ -61,38 +58,38 @@ export class AdjudicatorClient {
         if (claims) {
             this.claim(...claims);
         }
-        this.compile();
     }
+
+    public id = (value: string) => {
+        this._id = value;
+        return this;
+    };
 
     public subject = (value: string) => {
         this._subject = value;
-        this.compile();
         return this;
     };
 
     public mode = (value: Mode) => {
         this._mode = value;
-        this.compile();
         return this;
     };
 
     public claim = (...values: Array<ClaimClient | ClaimItem>) => {
         this._claims = this._claims.concat(values.map(AdjudicatorClient.resolveClaimItems));
-        this.compile();
         return this;
     };
 
     public claims = (values: Array<ClaimClient | ClaimItem>) => {
         this._claims = this._claims = values.map(AdjudicatorClient.resolveClaimItems);
-        this.compile();
         return this;
     };
 
-    public validate = () => AdjudicatorClient.validate(this.assertion);
+    public validate = () => AdjudicatorClient.validate(this.assertion());
 
-    private compile = (): void => {
-        this.assertion = {
-            [this.id]: {
+    public assertion = (): PartialAssertion => {
+        return {
+            [this._id]: {
                 ...this._subject && {subject: this._subject},
                 ...this._mode && {mode: this._mode},
                 ...this._claims.length && {claims: this._claims.map(({claim}) => claim)}

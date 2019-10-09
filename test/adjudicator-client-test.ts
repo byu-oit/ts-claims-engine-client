@@ -4,15 +4,16 @@ import {PartialClaim} from "../lib/claim-client";
 
 describe('Adjudicator Client', () => {
     let ac: AdjudicatorClient;
+    const defaultId = '0';
 
     beforeEach(() => {
-        ac = new AdjudicatorClient({id: '1'});
+        ac = new AdjudicatorClient().id(defaultId);
     });
 
     it('will instantiate an empty assertion with a random id', () => {
         const client = new AdjudicatorClient();
         assert.isFalse(client.validate());
-        assert.isEmpty(client.assertion[client.id]);
+        assert.isEmpty(client.assertion()[client._id]);
     });
 
     it('will format a client missing a subject', () => {
@@ -67,7 +68,7 @@ describe('Adjudicator Client', () => {
                 })
             ]);
         assert.isTrue(ac.validate());
-        assert.deepEqual(ac.assertion['1'].claims, expected)
+        assert.deepEqual(ac.assertion()['0'].claims, expected)
     });
 
     it('will format a client after immediate completion of claim requisites', () => {
@@ -101,7 +102,7 @@ describe('Adjudicator Client', () => {
 
     it('will format a client after immediate completion of assertion requisites', () => {
         const client = new AdjudicatorClient({
-            id: '1',
+            id: defaultId,
             subject: '123456789',
             mode: 'any',
             claims: [
@@ -118,7 +119,7 @@ describe('Adjudicator Client', () => {
         assert.isTrue(client.validate());
     });
 
-    it('will join multiple adjudicators', () => {
+    it('will join multiple claims', () => {
         const assertion = AdjudicatorClient.join(
             ac.subject('123456789')
                 .mode('any')
@@ -131,5 +132,27 @@ describe('Adjudicator Client', () => {
                 )
         );
         assert.isTrue(AdjudicatorClient.validate(assertion));
+    });
+
+    it('will create distinct claims using the same client', () => {
+        const first = ac.id('1')
+            .subject('987654321')
+            .mode('all')
+            .claim(AdjudicatorClient.claim()
+                .concept('subject-exists')
+                .relationship('eq')
+                .value('Johnny')
+                .qualify('age', 12))
+            .assertion();
+        const second = ac.id('2')
+            .subject('123456789')
+            .mode('any')
+            .claims([AdjudicatorClient.claim()
+                .concept('subject-exists')
+                .relationship('eq')
+                .value('John')
+                .qualify('age', 43)])
+            .assertion();
+        assert.notDeepEqual(first, second);
     });
 });

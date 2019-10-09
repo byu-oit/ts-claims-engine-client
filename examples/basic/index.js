@@ -1,4 +1,4 @@
-const CEC = require('@byu-oit/ts-claims-engine-client')
+const {AdjudicatorClient: CEC} = require('@byu-oit/ts-claims-engine-client')
 const client = new CEC()
 
 client.subject('John')
@@ -12,4 +12,4 @@ client.subject('John')
 const valid = client.validate()
 
 console.log('Is valid:', valid) // True
-console.log(JSON.stringify(client.assertion, null, 2)) // Assertions Object
+console.log(JSON.stringify(client.assertion(), null, 2)) // Assertions Object

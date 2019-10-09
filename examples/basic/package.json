@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@byu-oit/ts-claims-engine-client": "^2.0.2"
+    "@byu-oit/ts-claims-engine-client": "^4.0.0"
   }
 }
