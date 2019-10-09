@@ -1,5 +1,6 @@
 import {assert} from 'chai';
 import {AdjudicatorClient} from '../lib/adjudicator-client';
+import {PartialClaim} from "../lib/claim-client";
 
 describe('Adjudicator Client', () => {
     let ac: AdjudicatorClient;
@@ -16,13 +17,13 @@ describe('Adjudicator Client', () => {
 
     it('will format a client missing a subject', () => {
         ac.claim(
-                AdjudicatorClient.claim({
-                    concept: 'subject-exists',
-                    relationship: 'eq',
-                    value: 'John',
-                    qualifier: {age: 43}
-                })
-            );
+            AdjudicatorClient.claim({
+                concept: 'subject-exists',
+                relationship: 'eq',
+                value: 'John',
+                qualifier: {age: 43}
+            })
+        );
         assert.isFalse(ac.validate());
     });
 
@@ -30,6 +31,43 @@ describe('Adjudicator Client', () => {
         ac.subject('123456789')
             .mode('any');
         assert.isFalse(ac.validate());
+    });
+
+    it('will overwrite the claims while formatting the client', () => {
+        const expected: PartialClaim[] = [
+            {
+                concept: 'subject-exists',
+                relationship: 'eq',
+                value: 'John',
+                qualifier: {
+                    age: 43
+                }
+            }
+        ];
+        ac.subject('123456789')
+            .mode('any')
+            .claim(
+                AdjudicatorClient.claim({
+                    concept: 'subject-exists',
+                    relationship: 'eq',
+                    value: 'Johnny',
+                    qualifier: {
+                        age: 12
+                    }
+                })
+            )
+            .claims([
+                AdjudicatorClient.claim({
+                    concept: 'subject-exists',
+                    relationship: 'eq',
+                    value: 'John',
+                    qualifier: {
+                        age: 43
+                    }
+                })
+            ]);
+        assert.isTrue(ac.validate());
+        assert.deepEqual(ac.assertion['1'].claims, expected)
     });
 
     it('will format a client after immediate completion of claim requisites', () => {

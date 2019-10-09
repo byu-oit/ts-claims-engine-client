@@ -21,20 +21,26 @@ export interface AssertionClientParams {
 
 const v = new Ajv().compile(schema);
 
+export const jsonSchema = schema;
+
 export class AdjudicatorClient {
-    public static validate(assertion: any) {
+    public static validate = (assertion: any) => {
         return v(assertion);
-    }
+    };
 
-    public static claim(options?: ClaimClientParams) {
+    public static claim = (options?: ClaimClientParams) => {
         return new ClaimClient(options);
-    }
+    };
 
-    public static join(...assertions: AdjudicatorClient[]) {
+    public static join = (...assertions: AdjudicatorClient[]) => {
         return assertions.reduce((result, current) => {
             return Object.assign(result, current.assertion);
         }, {});
-    }
+    };
+
+    private static resolveClaimItems = (value: ClaimClient | ClaimItem): ClaimClient => {
+        return value instanceof ClaimClient ? value : new ClaimClient(value);
+    };
 
     public id: string;
     public assertion: PartialAssertion = {};
@@ -71,7 +77,13 @@ export class AdjudicatorClient {
     };
 
     public claim = (...values: Array<ClaimClient | ClaimItem>) => {
-        this._claims = this._claims.concat(values.map(value => value instanceof ClaimClient ? value : new ClaimClient(value)));
+        this._claims = this._claims.concat(values.map(AdjudicatorClient.resolveClaimItems));
+        this.compile();
+        return this;
+    };
+
+    public claims = (values: Array<ClaimClient | ClaimItem>) => {
+        this._claims = this._claims = values.map(AdjudicatorClient.resolveClaimItems);
         this.compile();
         return this;
     };
