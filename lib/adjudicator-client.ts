@@ -30,9 +30,9 @@ export class AdjudicatorClient {
         return new ClaimClient(options);
     };
 
-    public static join = (...assertions: AdjudicatorClient[]) => {
+    public static join = (...assertions: PartialAssertion[]) => {
         return assertions.reduce((result, current) => {
-            return Object.assign(result, current.assertion());
+            return Object.assign(result, current);
         }, {});
     };
 

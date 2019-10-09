@@ -120,17 +120,26 @@ describe('Adjudicator Client', () => {
     });
 
     it('will join multiple claims', () => {
-        const assertion = AdjudicatorClient.join(
-            ac.subject('123456789')
-                .mode('any')
-                .claim(
-                    AdjudicatorClient.claim()
-                        .concept('subject-exists')
-                        .relationship('eq')
-                        .value('John')
-                        .qualify('age', 43)
-                )
-        );
+        const first = ac.id('1')
+            .subject('987654321')
+            .mode('all')
+            .claim(AdjudicatorClient.claim()
+                .concept('subject-exists')
+                .relationship('eq')
+                .value('Johnny')
+                .qualify('age', 12))
+            .assertion();
+        const second = ac.id('2')
+            .subject('123456789')
+            .mode('any')
+            .claims([AdjudicatorClient.claim()
+                .concept('subject-exists')
+                .relationship('eq')
+                .value('John')
+                .qualify('age', 43)])
+            .assertion();
+        const assertion = AdjudicatorClient.join(first, second);
+        assert.hasAllKeys(assertion, ['1', '2']);
         assert.isTrue(AdjudicatorClient.validate(assertion));
     });
 
