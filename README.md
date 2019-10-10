@@ -11,7 +11,7 @@ The purpose of the Claims Adjudicator Client is to facilitate the formation of c
 
 ## Example
 ```ts
-const CEC = require('@byu-oit/ts-claims-engine-client')
+const {AdjudicatorClient: CEC} = require('@byu-oit/ts-claims-engine-client')
 const client = new CEC()
 
 client.subject('John')
@@ -33,9 +33,9 @@ console.log(JSON.stringify(client.assertion, null, 2))
 Some of the parameters and return types are complex objects. Instead of listing them in the method definitions, they have been listed in the [Appendix](#appendix) under [API Reference](#api-reference).
 
 ### AdjudicatorClient
-Creates a new instance of the AssertionsClient.
+Creates a new instance of the AdjudicatorClient.
 ```ts
-new AssertionsClient()
+AdjudicatorClient(options: AdjudicatorClientParams = {})
 ```
 
 ### Public Data Members
@@ -85,6 +85,13 @@ validate(): boolean
 
 ### API Reference
 ```ts
+interface AdjudicatorClientParams {
+    id?: string;
+    subject?: string;
+    mode?: Mode;
+    claims?: Array<ClaimClient | ClaimItem>;
+}
+
 interface ClaimClientParams {
     concept?: string;
     relationship?: Relationship;

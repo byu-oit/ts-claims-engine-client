@@ -12,7 +12,7 @@ export interface PartialAssertion {
     };
 }
 
-export interface AssertionClientParams {
+export interface AdjudicatorClientParams {
     id?: string;
     subject?: string;
     mode?: Mode;
@@ -46,7 +46,7 @@ export class AdjudicatorClient {
     private _mode?: Mode;
     private _claims: ClaimClient[] = [];
 
-    constructor(options: AssertionClientParams = {}) {
+    constructor(options: AdjudicatorClientParams = {}) {
         const {id, subject, mode, claims} = options;
         this._id = id || uuid();
         if (subject) {
