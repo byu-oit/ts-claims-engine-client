@@ -1,23 +1,23 @@
 import {assert} from 'chai'
-import {ClaimClient} from '../lib/claim-client'
-import {ClaimItem} from "@byu-oit/ts-claims-engine"
+import Client from '../lib/claim-client'
+import {ClaimItem, Relationships} from "@byu-oit/ts-claims-engine"
 
 describe('Claim Client', () => {
-    let cc: ClaimClient
+    let client: Client
 
     beforeEach(() => {
-        cc = new ClaimClient()
+        client = new Client()
     })
 
     it('will fail to format a client missing a concept', () => {
-        const {valid} = cc.relationship('eq')
+        const {valid} = client.relationship(Relationships.EQ)
             .value('John')
             .qualify('age', 43)
         assert.isFalse(valid)
     })
 
     it('will fail to format a client missing a relationship', () => {
-            const {valid} = cc.concept('subject-exists')
+            const {valid} = client.concept('subject-exists')
                 .value('John')
                 .qualify('age', 43)
             assert.isFalse(valid)
@@ -25,8 +25,8 @@ describe('Claim Client', () => {
 
 
     it('will fail to format a client missing a value', () => {
-            const {valid} = cc.concept('subject-exists')
-                .relationship('eq')
+            const {valid} = client.concept('subject-exists')
+                .relationship(Relationships.EQ)
                 .qualify('age', 43)
             assert.isFalse(valid)
     })
@@ -34,14 +34,14 @@ describe('Claim Client', () => {
     it('will format a client without a qualifier', () => {
         const expected: ClaimItem = {
             concept: 'subject-exists',
-            relationship: 'eq',
+            relationship: Relationships.EQ,
             value: 'John',
             qualifier: {
                 age: 43
             }
         }
-        const {claim, valid} = cc.concept('subject-exists')
-            .relationship('eq')
+        const {claim, valid} = client.concept('subject-exists')
+            .relationship(Relationships.EQ)
             .value('John')
             .qualify('age', 43)
         assert.isTrue(valid)
@@ -51,15 +51,15 @@ describe('Claim Client', () => {
     it('will format a client with multiple qualifiers', () => {
         const expected: ClaimItem = {
             concept: 'subject-exists',
-            relationship: 'eq',
+            relationship: Relationships.EQ,
             value: 'John',
             qualifier: {
                 age: 43,
                 height: 5.6
             }
         }
-        const {claim, valid} = cc.concept('subject-exists')
-            .relationship('eq')
+        const {claim, valid} = client.concept('subject-exists')
+            .relationship(Relationships.EQ)
             .value('John')
             .qualify('age', 43)
             .qualify('height', 5.6)

@@ -1,26 +1,27 @@
 import {assert} from 'chai'
-import {AdjudicatorClient} from '../lib/adjudicator-client'
-import {PartialClaim} from "../lib/claim-client"
+import Client from '../lib/adjudicator-client'
+import {PartialClaim} from '../lib/claim-client'
+import {Modes, Relationships} from '@byu-oit/ts-claims-engine'
 
 describe('Adjudicator Client', () => {
-    let ac: AdjudicatorClient
+    let ac: Client
     const defaultId = '0'
 
     beforeEach(() => {
-        ac = new AdjudicatorClient().id(defaultId)
+        ac = new Client().id(defaultId)
     })
 
     it('will instantiate an empty assertion with a random id', () => {
-        const client = new AdjudicatorClient()
+        const client = new Client()
         assert.isFalse(client.validate())
         assert.isEmpty(client.assertion()[client._id])
     })
 
     it('will format a client missing a subject', () => {
         ac.claim(
-            AdjudicatorClient.claim({
+            Client.claim({
                 concept: 'subject-exists',
-                relationship: 'eq',
+                relationship: Relationships.EQ,
                 value: 'John',
                 qualifier: {age: 43}
             })
@@ -30,7 +31,7 @@ describe('Adjudicator Client', () => {
 
     it('will format a client missing at least one claim', () => {
         ac.subject('123456789')
-            .mode('any')
+            .mode(Modes.ANY)
         assert.isFalse(ac.validate())
     })
 
@@ -38,7 +39,7 @@ describe('Adjudicator Client', () => {
         const expected: PartialClaim[] = [
             {
                 concept: 'subject-exists',
-                relationship: 'eq',
+                relationship: Relationships.EQ,
                 value: 'John',
                 qualifier: {
                     age: 43
@@ -46,11 +47,11 @@ describe('Adjudicator Client', () => {
             }
         ]
         ac.subject('123456789')
-            .mode('any')
+            .mode(Modes.ANY)
             .claim(
-                AdjudicatorClient.claim({
+                Client.claim({
                     concept: 'subject-exists',
-                    relationship: 'eq',
+                    relationship: Relationships.EQ,
                     value: 'Johnny',
                     qualifier: {
                         age: 12
@@ -58,9 +59,9 @@ describe('Adjudicator Client', () => {
                 })
             )
             .claims([
-                AdjudicatorClient.claim({
+                Client.claim({
                     concept: 'subject-exists',
-                    relationship: 'eq',
+                    relationship: Relationships.EQ,
                     value: 'John',
                     qualifier: {
                         age: 43
@@ -73,11 +74,11 @@ describe('Adjudicator Client', () => {
 
     it('will format a client after immediate completion of claim requisites', () => {
         ac.subject('123456789')
-            .mode('any')
+            .mode(Modes.ANY)
             .claim(
-                AdjudicatorClient.claim({
+                Client.claim({
                     concept: 'subject-exists',
-                    relationship: 'eq',
+                    relationship: Relationships.EQ,
                     value: 'John',
                     qualifier: {
                         age: 43
@@ -89,11 +90,11 @@ describe('Adjudicator Client', () => {
 
     it('will format a client after eventual completion of claim requisites', () => {
         ac.subject('123456789')
-            .mode('any')
+            .mode(Modes.ANY)
             .claim(
-                AdjudicatorClient.claim()
+                Client.claim()
                     .concept('subject-exists')
-                    .relationship('eq')
+                    .relationship(Relationships.EQ)
                     .value('John')
                     .qualify('age', 43)
             )
@@ -101,14 +102,14 @@ describe('Adjudicator Client', () => {
     })
 
     it('will format a client after immediate completion of assertion requisites', () => {
-        const client = new AdjudicatorClient({
+        const client = new Client({
             id: defaultId,
             subject: '123456789',
-            mode: 'any',
+            mode: Modes.ANY,
             claims: [
                 {
                     concept: 'subject-exists',
-                    relationship: 'eq',
+                    relationship: Relationships.EQ,
                     value: 'John',
                     qualifier: {
                         age: 43
@@ -122,43 +123,43 @@ describe('Adjudicator Client', () => {
     it('will join multiple claims', () => {
         const first = ac.id('1')
             .subject('987654321')
-            .mode('all')
-            .claim(AdjudicatorClient.claim()
+            .mode(Modes.ALL)
+            .claim(Client.claim()
                 .concept('subject-exists')
-                .relationship('eq')
+                .relationship(Relationships.EQ)
                 .value('Johnny')
                 .qualify('age', 12))
             .assertion()
         const second = ac.id('2')
             .subject('123456789')
-            .mode('any')
-            .claims([AdjudicatorClient.claim()
+            .mode(Modes.ANY)
+            .claims([Client.claim()
                 .concept('subject-exists')
-                .relationship('eq')
+                .relationship(Relationships.EQ)
                 .value('John')
                 .qualify('age', 43)])
             .assertion()
-        const assertion = AdjudicatorClient.join(first, second)
+        const assertion = Client.join(first, second)
         assert.hasAllKeys(assertion, ['1', '2'])
-        assert.isTrue(AdjudicatorClient.validate(assertion))
+        assert.isTrue(Client.validate(assertion))
     })
 
     it('will create distinct claims using the same client', () => {
         const first = ac.id('1')
             .subject('987654321')
-            .mode('all')
-            .claim(AdjudicatorClient.claim()
+            .mode(Modes.ALL)
+            .claim(Client.claim()
                 .concept('subject-exists')
-                .relationship('eq')
+                .relationship(Relationships.EQ)
                 .value('Johnny')
                 .qualify('age', 12))
             .assertion()
         const second = ac.id('2')
             .subject('123456789')
-            .mode('any')
-            .claims([AdjudicatorClient.claim()
+            .mode(Modes.ANY)
+            .claims([Client.claim()
                 .concept('subject-exists')
-                .relationship('eq')
+                .relationship(Relationships.EQ)
                 .value('John')
                 .qualify('age', 43)])
             .assertion()
