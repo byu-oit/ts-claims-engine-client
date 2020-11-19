@@ -1,4 +1,4 @@
-<h1 align="center">Claims Adjudicator Module</h1>
+<h1 align="center">Claims Adjudicator Client</h1>
 
 <p align="center">
     <a href="https://github.com/byu-oit/ts-claims-engine-middleware/actions?query=workflow%3ACI">
