@@ -82,7 +82,7 @@ export class AdjudicatorClient {
     }
 
     public validate (): boolean {
-        return AdjudicatorClient.validate(this.assertion())
+        return AdjudicatorClient.validate(this.assertion()) as boolean
     }
 
     public assertion (): PartialAssertion {
