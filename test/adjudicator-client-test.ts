@@ -1,20 +1,20 @@
-import {assert} from 'chai';
-import {AdjudicatorClient} from '../lib/adjudicator-client';
-import {PartialClaim} from "../lib/claim-client";
+import {assert} from 'chai'
+import {AdjudicatorClient} from '../lib/adjudicator-client'
+import {PartialClaim} from "../lib/claim-client"
 
 describe('Adjudicator Client', () => {
-    let ac: AdjudicatorClient;
-    const defaultId = '0';
+    let ac: AdjudicatorClient
+    const defaultId = '0'
 
     beforeEach(() => {
-        ac = new AdjudicatorClient().id(defaultId);
-    });
+        ac = new AdjudicatorClient().id(defaultId)
+    })
 
     it('will instantiate an empty assertion with a random id', () => {
-        const client = new AdjudicatorClient();
-        assert.isFalse(client.validate());
-        assert.isEmpty(client.assertion()[client._id]);
-    });
+        const client = new AdjudicatorClient()
+        assert.isFalse(client.validate())
+        assert.isEmpty(client.assertion()[client._id])
+    })
 
     it('will format a client missing a subject', () => {
         ac.claim(
@@ -24,15 +24,15 @@ describe('Adjudicator Client', () => {
                 value: 'John',
                 qualifier: {age: 43}
             })
-        );
-        assert.isFalse(ac.validate());
-    });
+        )
+        assert.isFalse(ac.validate())
+    })
 
     it('will format a client missing at least one claim', () => {
         ac.subject('123456789')
-            .mode('any');
-        assert.isFalse(ac.validate());
-    });
+            .mode('any')
+        assert.isFalse(ac.validate())
+    })
 
     it('will overwrite the claims while formatting the client', () => {
         const expected: PartialClaim[] = [
@@ -44,7 +44,7 @@ describe('Adjudicator Client', () => {
                     age: 43
                 }
             }
-        ];
+        ]
         ac.subject('123456789')
             .mode('any')
             .claim(
@@ -66,10 +66,10 @@ describe('Adjudicator Client', () => {
                         age: 43
                     }
                 })
-            ]);
-        assert.isTrue(ac.validate());
+            ])
+        assert.isTrue(ac.validate())
         assert.deepEqual(ac.assertion()['0'].claims, expected)
-    });
+    })
 
     it('will format a client after immediate completion of claim requisites', () => {
         ac.subject('123456789')
@@ -83,9 +83,9 @@ describe('Adjudicator Client', () => {
                         age: 43
                     }
                 })
-            );
-        assert.isTrue(ac.validate());
-    });
+            )
+        assert.isTrue(ac.validate())
+    })
 
     it('will format a client after eventual completion of claim requisites', () => {
         ac.subject('123456789')
@@ -96,9 +96,9 @@ describe('Adjudicator Client', () => {
                     .relationship('eq')
                     .value('John')
                     .qualify('age', 43)
-            );
-        assert.isTrue(ac.validate());
-    });
+            )
+        assert.isTrue(ac.validate())
+    })
 
     it('will format a client after immediate completion of assertion requisites', () => {
         const client = new AdjudicatorClient({
@@ -115,9 +115,9 @@ describe('Adjudicator Client', () => {
                     }
                 }
             ]
-        });
-        assert.isTrue(client.validate());
-    });
+        })
+        assert.isTrue(client.validate())
+    })
 
     it('will join multiple claims', () => {
         const first = ac.id('1')
@@ -128,7 +128,7 @@ describe('Adjudicator Client', () => {
                 .relationship('eq')
                 .value('Johnny')
                 .qualify('age', 12))
-            .assertion();
+            .assertion()
         const second = ac.id('2')
             .subject('123456789')
             .mode('any')
@@ -137,11 +137,11 @@ describe('Adjudicator Client', () => {
                 .relationship('eq')
                 .value('John')
                 .qualify('age', 43)])
-            .assertion();
-        const assertion = AdjudicatorClient.join(first, second);
-        assert.hasAllKeys(assertion, ['1', '2']);
-        assert.isTrue(AdjudicatorClient.validate(assertion));
-    });
+            .assertion()
+        const assertion = AdjudicatorClient.join(first, second)
+        assert.hasAllKeys(assertion, ['1', '2'])
+        assert.isTrue(AdjudicatorClient.validate(assertion))
+    })
 
     it('will create distinct claims using the same client', () => {
         const first = ac.id('1')
@@ -152,7 +152,7 @@ describe('Adjudicator Client', () => {
                 .relationship('eq')
                 .value('Johnny')
                 .qualify('age', 12))
-            .assertion();
+            .assertion()
         const second = ac.id('2')
             .subject('123456789')
             .mode('any')
@@ -161,7 +161,7 @@ describe('Adjudicator Client', () => {
                 .relationship('eq')
                 .value('John')
                 .qualify('age', 43)])
-            .assertion();
-        assert.notDeepEqual(first, second);
-    });
-});
+            .assertion()
+        assert.notDeepEqual(first, second)
+    })
+})
